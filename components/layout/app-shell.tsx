@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation"
 import { Building2, LayoutDashboard, Menu, Search, X } from "lucide-react"
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
+import { ThemeToggle } from "@/components/theme-toggle"
 
 const navigation = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
@@ -41,7 +42,10 @@ export function AppShell({ title, children }: { title: string; children: React.R
     <div className="md:pl-64">
       <header className="flex h-16 items-center justify-between border-b bg-background px-4 sm:px-7">
         <div className="flex items-center gap-3"><Button className="md:hidden" variant="ghost" size="icon" aria-label="Open navigation" onClick={() => setOpen(true)}><Menu /></Button><h1 className="text-base font-semibold sm:text-lg">{title}</h1></div>
-        <span className="hidden text-xs font-medium text-muted-foreground sm:block">National Government-Owned Buildings Inventory</span>
+        <div className="flex items-center gap-3">
+          <span className="hidden text-xs font-medium text-muted-foreground lg:block">National Government-Owned Buildings Inventory</span>
+          <ThemeToggle />
+        </div>
       </header>
       <main className="mx-auto max-w-7xl p-4 sm:p-7">{children}</main>
     </div>
