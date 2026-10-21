@@ -140,7 +140,33 @@
 }
 
 @layer components {
+  .form-grid {
+    @apply grid gap-x-4 gap-y-4 sm:grid-cols-2;
+  }
+  .asset-map-marker {
+    width: 18px;
+    height: 18px;
+    border: 3px solid white;
+    border-radius: 50%;
+    box-shadow: 0 1px 5px rgb(0 0 0 / 45%);
+    cursor: pointer;
+  }
   .field {
     @apply h-9 w-full rounded-md border border-input bg-background px-3 text-sm shadow-xs outline-none placeholder:text-muted-foreground focus:border-primary focus:ring-2 focus:ring-primary/20;
   }
+}
+
+@media print {
+  @page { size: A4 landscape; margin: 12mm; }
+  html, body, .app-shell { background: #fff !important; color: #111 !important; }
+  .app-shell > aside, .app-shell > div > header, .report-screen-only { display: none !important; }
+  .app-shell > div { padding-left: 0 !important; }
+  .app-shell main { max-width: none !important; padding: 0 !important; }
+  .report-sheet { background: #fff !important; border: 0 !important; box-shadow: none !important; padding: 0 !important; }
+  .report-print-header { display: flex !important; justify-content: space-between; margin-bottom: 12mm; }
+  .report-section { break-inside: avoid; }
+  .report-section + .report-section { break-before: page; }
+  .report-table { min-width: 0 !important; width: 100% !important; font-size: 8px !important; }
+  .report-table th, .report-table td { border: 1px solid #777 !important; padding: 5px !important; }
+  .report-sheet .overflow-x-auto { overflow: visible !important; }
 }

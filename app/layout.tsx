@@ -1,4 +1,5 @@
 import "./globals.css"
+import "mapbox-gl/dist/mapbox-gl.css"
 import type { Metadata } from "next"
 import { Poppins } from "next/font/google"
 import { ThemeProvider } from "@/components/theme-provider"

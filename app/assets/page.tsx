@@ -1,3 +1,3 @@
-import { AssetsContent } from "@/components/assets/assets-content"
+import { BuildingsContent } from "@/components/assets/buildings-content"
 
-export default function AssetsPage() { return <AssetsContent /> }
+export default function AssetsPage() { return <BuildingsContent /> }

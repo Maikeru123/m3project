@@ -2,14 +2,16 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { Building2, LayoutDashboard, Menu, Search, X } from "lucide-react"
+import { Building2, ClipboardCheck, FileText, LayoutDashboard, Menu, X } from "lucide-react"
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { ThemeToggle } from "@/components/theme-toggle"
 
 const navigation = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
-  { href: "/assets", label: "Assets Inquiry", icon: Search },
+  { href: "/assets", label: "Buildings", icon: Building2 },
+  { href: "/inspections", label: "Inspections", icon: ClipboardCheck },
+  { href: "/reports", label: "Reports", icon: FileText },
 ]
 
 export function AppShell({ title, children }: { title: string; children: React.ReactNode }) {

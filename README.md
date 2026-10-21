@@ -4,9 +4,13 @@ National Government-Owned Buildings Inventory Application is a responsive academ
 
 ## Features
 
-- Live government-building dashboard and condition charts
+- Live building dashboard based on each building's latest inspection
+- Interactive Mapbox asset map with condition legend and location search
 - Asset search and filtering
-- Asset registration with image upload
+- Building registration with a main photograph and optional location geotag
+- Repeatable site inspections with four photo views and GPS extraction when present
+- Agency and inspection-year reports with print layouts
+- Single-page Add Building form with Form 16-24 fields, geotagging, optional Form 16-25 Agency Inventory inclusion, and Form 16-26 property number
 - Asset details, editing, and permanent deletion
 - Good, Minor Repair, Major Repair, and Condemned classifications
 - Responsive desktop table and mobile asset cards
@@ -27,6 +31,7 @@ Requirements: Node.js 20.9 or newer and a Supabase project.
    ```env
    NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
    NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=your_publishable_key
+   NEXT_PUBLIC_MAPBOX_TOKEN=your_mapbox_public_token
    ```
 
 3. Link Supabase and apply the migrations:
@@ -36,6 +41,8 @@ Requirements: Node.js 20.9 or newer and a Supabase project.
    npx supabase link --project-ref your-project-ref
    npx supabase db push
    ```
+
+   The coordinate migration adds optional latitude and longitude columns. Existing text-only records can be placed on the map by editing them and selecting a place or entering coordinates. Search selections saved with new or edited assets use Mapbox permanent geocoding, which requires that permanent geocoding be enabled for the Mapbox account. Manual coordinate entry remains available.
 
 4. Start the development server:
 
@@ -52,6 +59,7 @@ Requirements: Node.js 20.9 or newer and a Supabase project.
 
    - `NEXT_PUBLIC_SUPABASE_URL`
    - `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`
+   - `NEXT_PUBLIC_MAPBOX_TOKEN`
 
 5. Deploy. No service-role key or administrator credential is required by the application.
 
