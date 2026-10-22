@@ -5,7 +5,7 @@ National Government-Owned Buildings Inventory Application is a responsive academ
 ## Features
 
 - Live building dashboard based on each building's latest inspection
-- Interactive Mapbox asset map with condition legend and location search
+- Interactive Leaflet asset map with OpenStreetMap tiles and condition legend
 - Asset search and filtering
 - Building registration with a main photograph and optional location geotag
 - Repeatable site inspections with four photo views and GPS extraction when present
@@ -31,7 +31,6 @@ Requirements: Node.js 20.9 or newer and a Supabase project.
    ```env
    NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
    NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=your_publishable_key
-   NEXT_PUBLIC_MAPBOX_TOKEN=your_mapbox_public_token
    ```
 
 3. Link Supabase and apply the migrations:
@@ -42,7 +41,7 @@ Requirements: Node.js 20.9 or newer and a Supabase project.
    npx supabase db push
    ```
 
-   The coordinate migration adds optional latitude and longitude columns. Existing text-only records can be placed on the map by editing them and selecting a place or entering coordinates. Search selections saved with new or edited assets use Mapbox permanent geocoding, which requires that permanent geocoding be enabled for the Mapbox account. Manual coordinate entry remains available.
+   The coordinate migration adds optional latitude and longitude columns. Place a building pin by clicking the map in the building form, or enter coordinates manually. The location text is entered separately. The map uses OpenStreetMap's public tile server with visible attribution; deployments with heavy map traffic should use an appropriate tile provider or self-host tiles.
 
 4. Start the development server:
 
@@ -59,7 +58,6 @@ Requirements: Node.js 20.9 or newer and a Supabase project.
 
    - `NEXT_PUBLIC_SUPABASE_URL`
    - `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`
-   - `NEXT_PUBLIC_MAPBOX_TOKEN`
 
 5. Deploy. No service-role key or administrator credential is required by the application.
 

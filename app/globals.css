@@ -151,6 +151,7 @@
     box-shadow: 0 1px 5px rgb(0 0 0 / 45%);
     cursor: pointer;
   }
+  .asset-map-icon { background: transparent; border: 0; }
   .field {
     @apply h-9 w-full rounded-md border border-input bg-background px-3 text-sm shadow-xs outline-none placeholder:text-muted-foreground focus:border-primary focus:ring-2 focus:ring-primary/20;
   }
@@ -169,4 +170,7 @@
   .report-table { min-width: 0 !important; width: 100% !important; font-size: 8px !important; }
   .report-table th, .report-table td { border: 1px solid #777 !important; padding: 5px !important; }
   .report-sheet .overflow-x-auto { overflow: visible !important; }
+  .report-edit-input { display: none !important; }
+  .report-print-value { display: inline !important; }
+  .report-note .report-print-value { display: block !important; }
 }

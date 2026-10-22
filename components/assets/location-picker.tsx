@@ -1,60 +1,65 @@
 "use client"
 
-import { MapPin, Search } from "lucide-react"
-import { useEffect, useState } from "react"
-import { mapboxToken, searchPlaces, type Coordinates, type PlaceResult } from "@/lib/mapbox"
+import { useEffect, useRef, useState } from "react"
+import type * as Leaflet from "leaflet"
+import type { Coordinates } from "@/lib/types/coordinates"
 
-export function LocationPicker({ value, onChange, coordinates, onCoordinatesChange, showCoordinates = true }: {
+export function LocationPicker({ value, onChange, coordinates, onCoordinatesChange }: {
   value: string
   onChange: (value: string) => void
   coordinates: Coordinates | null
   onCoordinatesChange: (value: Coordinates | null) => void
-  showCoordinates?: boolean
 }) {
-  const [results, setResults] = useState<PlaceResult[]>([])
-  const [error, setError] = useState<string | null>(null)
-  const [selected, setSelected] = useState(true)
-  const [latitudeText, setLatitudeText] = useState(coordinates?.latitude?.toString() ?? "")
-  const [longitudeText, setLongitudeText] = useState(coordinates?.longitude?.toString() ?? "")
+  const container = useRef<HTMLDivElement>(null)
+  const map = useRef<Leaflet.Map | null>(null)
+  const pin = useRef<Leaflet.CircleMarker | null>(null)
+  const [leaflet, setLeaflet] = useState<typeof Leaflet | null>(null)
+  const [mapError, setMapError] = useState<string | null>(null)
+  const callback = useRef(onCoordinatesChange)
+
+  useEffect(() => { callback.current = onCoordinatesChange }, [onCoordinatesChange])
 
   useEffect(() => {
-    if (selected || value.trim().length < 3 || !mapboxToken) return
-    const controller = new AbortController()
-    const timer = window.setTimeout(async () => {
-      try {
-        setResults(await searchPlaces(value.trim(), controller.signal, true))
-        setError(null)
-      } catch (cause) {
-        if (!controller.signal.aborted) { setResults([]); setError(cause instanceof Error ? cause.message : "Place search failed.") }
-      }
-    }, 450)
-    return () => { window.clearTimeout(timer); controller.abort() }
-  }, [value, selected])
+    if (!container.current) return
+    let active = true
+    import("leaflet").then((L) => {
+      if (!active || !container.current) return
+      const instance = L.map(container.current).setView(
+        coordinates ? [coordinates.latitude, coordinates.longitude] : [12.5, 122.5],
+        coordinates ? 14 : 5,
+      )
+      L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>',
+        maxZoom: 19,
+      }).addTo(instance)
+      instance.on("click", (event: Leaflet.LeafletMouseEvent) => {
+        const selected = { latitude: Number(event.latlng.lat.toFixed(6)), longitude: Number(event.latlng.lng.toFixed(6)) }
+        callback.current(selected)
+      })
+      map.current = instance
+      setLeaflet(L)
+      window.setTimeout(() => instance.invalidateSize(), 0)
+    }).catch(() => { if (active) setMapError("The location map could not load. Enter coordinates below.") })
+    return () => { active = false; map.current?.remove(); map.current = null; pin.current = null }
+    // The map is created once; coordinate changes update its pin in the effect below.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
-  const updateCoordinate = (axis: keyof Coordinates, text: string) => {
-    const latitude = axis === "latitude" ? text : latitudeText
-    const longitude = axis === "longitude" ? text : longitudeText
-    if (axis === "latitude") setLatitudeText(text)
-    else setLongitudeText(text)
-    const lat = Number(latitude)
-    const lon = Number(longitude)
-    onCoordinatesChange(latitude.trim() && longitude.trim() && Number.isFinite(lat) && Number.isFinite(lon) && Math.abs(lat) <= 90 && Math.abs(lon) <= 180 ? { latitude: lat, longitude: lon } : null)
-  }
+  useEffect(() => {
+    if (!map.current || !leaflet) return
+    pin.current?.remove()
+    pin.current = null
+    if (!coordinates) return
+    pin.current = leaflet.circleMarker([coordinates.latitude, coordinates.longitude], {
+      radius: 8, color: "#fff", weight: 3, fillColor: "#b4232c", fillOpacity: 1,
+    }).addTo(map.current)
+    map.current.setView([coordinates.latitude, coordinates.longitude], Math.max(map.current.getZoom(), 12))
+  }, [leaflet, coordinates])
 
   return <div className="space-y-2">
-    <div className="relative">
-      <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
-      <input className="field pl-9" aria-label="Location" value={value} onChange={(event) => { onChange(event.target.value); onCoordinatesChange(null); setLatitudeText(""); setLongitudeText(""); setSelected(false); setResults([]) }} placeholder="Search a place or type an address" autoComplete="off" />
-    </div>
-    {results.length > 0 && <div className="max-h-44 overflow-y-auto rounded-md border bg-background shadow-sm" role="listbox" aria-label="Place suggestions">
-      {results.map((result) => <button type="button" key={`${result.longitude}-${result.latitude}-${result.label}`} className="flex w-full items-start gap-2 border-b px-3 py-2 text-left text-xs last:border-0 hover:bg-muted" onClick={() => { onChange(result.label); onCoordinatesChange({ latitude: result.latitude, longitude: result.longitude }); setLatitudeText(String(result.latitude)); setLongitudeText(String(result.longitude)); setSelected(true); setResults([]); setError(null) }}><MapPin className="mt-0.5 size-3.5 shrink-0 text-primary" />{result.label}</button>)}
-    </div>}
-    {error && <p className="text-xs text-destructive">{error} You can enter coordinates manually.</p>}
-    {!mapboxToken && <p className="text-xs text-muted-foreground">Add a Mapbox public token to enable place search.</p>}
-    {showCoordinates && <div className="grid grid-cols-2 gap-2">
-      <label className="text-xs text-muted-foreground">Latitude<input type="number" min="-90" max="90" step="any" className="field mt-1" value={latitudeText} onChange={(event) => updateCoordinate("latitude", event.target.value)} placeholder="e.g. 7.0731" /></label>
-      <label className="text-xs text-muted-foreground">Longitude<input type="number" min="-180" max="180" step="any" className="field mt-1" value={longitudeText} onChange={(event) => updateCoordinate("longitude", event.target.value)} placeholder="e.g. 125.6128" /></label>
-    </div>}
-    {showCoordinates && <p className="text-xs text-muted-foreground">Choose a search result to place the pin, or type both coordinates manually.</p>}
+    <input className="field" aria-label="Location" value={value} onChange={(event) => onChange(event.target.value)} placeholder="Barangay, city / municipality" />
+    <div ref={container} className="relative z-0 h-56 overflow-hidden rounded-md border bg-muted" aria-label="Click map to place building pin" />
+    {mapError && <p className="text-xs text-destructive">{mapError}</p>}
+    <p className="text-xs text-muted-foreground">Click the map to place a pin, or enter latitude and longitude in Geotagged location below.</p>
   </div>
 }

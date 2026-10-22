@@ -202,8 +202,8 @@ function BuildingFormDialog({ asset, onClose, onSaved }: { asset?: Asset; onClos
             {agencyChoice === "Other (Please Specify)" && <input {...register("managing_agency_other")} aria-label="Specify agency" className="field mt-2" placeholder="Specify agency" />}
           </Field>
           <Field label="Name of building" required error={errors.building_name?.message}><input {...register("building_name")} className="field" /></Field>
-          <Field label="Location" required error={errors.location?.message} hint="Barangay, city / municipality. Search and select a result to fill coordinates.">
-            <Controller name="location" control={control} render={({ field }) => <LocationPicker value={field.value ?? ""} onChange={field.onChange} coordinates={coordinates} onCoordinatesChange={(value) => { setValue("latitude", value ? String(value.latitude) : ""); setValue("longitude", value ? String(value.longitude) : "") }} showCoordinates={false} />} />
+          <Field label="Location" required error={errors.location?.message} hint="Type the location, then click the map to place its pin or enter coordinates below.">
+            <Controller name="location" control={control} render={({ field }) => <LocationPicker value={field.value ?? ""} onChange={field.onChange} coordinates={coordinates} onCoordinatesChange={(value) => { setValue("latitude", value ? String(value.latitude) : ""); setValue("longitude", value ? String(value.longitude) : "") }} />} />
           </Field>
           <Field label="Group" error={errors.building_group?.message}><select {...register("building_group")} className="field"><option value="">— Optional —</option>{GROUPS.map((group) => <option key={group}>{group}</option>)}</select></Field>
         </div></Section>
