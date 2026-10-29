@@ -12,8 +12,8 @@ const poppins = Poppins({
 })
 
 export const metadata: Metadata = {
-  title: { default: "NGOBIA", template: "%s | NGOBIA" },
-  description: "National Government-Owned Buildings Inventory Application",
+  title: { default: "Database Management Project Module 3", template: "%s | Database Management Project Module 3" },
+  description: "Database Management Project Module 3 building inventory application",
 }
 
 export default function RootLayout({

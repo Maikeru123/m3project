@@ -72,9 +72,9 @@ export function DashboardContent() {
   ]
 
   return (
-    <AppShell title="NGOBIA Dashboard">
+    <AppShell title="Dashboard">
       <div className="mb-6 flex flex-col justify-between gap-4 lg:flex-row lg:items-end">
-        <div><h2 className="text-2xl font-bold tracking-tight sm:text-3xl">NGOBIA Dashboard</h2><p className="mt-1 text-sm text-muted-foreground">Buildings and the findings from their latest site visits.</p></div>
+        <div><h2 className="text-2xl font-bold tracking-tight sm:text-3xl">Database Management Project Module 3</h2><p className="mt-1 text-sm text-muted-foreground">Buildings and the findings from their latest site visits.</p></div>
         <div className="flex flex-wrap gap-2"><Button onClick={() => setAdding(true)}><Plus />Add building</Button><Link href="/inspections" className="inline-flex h-8 items-center gap-1.5 rounded-lg border bg-background px-2.5 text-sm font-medium hover:bg-muted">New inspection <ArrowRight className="size-4" /></Link></div>
       </div>
 

@@ -1,33 +1,25 @@
-import { readFile } from "node:fs/promises"
-import path from "node:path"
 import { ImageResponse } from "next/og"
-
-/* eslint-disable @next/next/no-img-element */
 
 export const size = { width: 64, height: 64 }
 export const contentType = "image/png"
 
-export default async function Icon() {
-  const logo = await readFile(path.join(process.cwd(), "public", "NGOBIA.png"))
-  const logoUrl = `data:image/png;base64,${logo.toString("base64")}`
-
+export default function Icon() {
   return new ImageResponse(
     <div
       style={{
         width: 64,
         height: 64,
         display: "flex",
-        position: "relative",
-        overflow: "hidden",
+        alignItems: "center",
+        justifyContent: "center",
+        borderRadius: 12,
+        background: "#b4232c",
+        color: "#fff",
+        fontSize: 25,
+        fontWeight: 700,
       }}
     >
-      <img
-        src={logoUrl}
-        alt="NGOBIA N"
-        width={282}
-        height={94}
-        style={{ position: "absolute", left: -16, top: -13 }}
-      />
+      DB
     </div>,
     size
   )

@@ -20,10 +20,18 @@ export function AppShell({ title, children }: { title: string; children: React.R
 
   const nav = (
     <>
-      <Link href="/dashboard" className="mb-8 flex items-center gap-3 px-2" onClick={() => setOpen(false)}>
-        <span className="grid size-9 place-items-center rounded-lg bg-primary text-white"><Building2 className="size-5" /></span>
-        <span className="leading-tight text-foreground"><strong className="block text-base">NGOBIA</strong><span className="text-[10px] text-muted-foreground">National Government-Owned<br />Buildings Inventory Application</span></span>
-      </Link>
+      <div className="mb-7 px-2">
+        <Link href="/dashboard" className="flex items-start gap-3" onClick={() => setOpen(false)}>
+          <span className="grid size-9 shrink-0 place-items-center rounded-lg bg-primary text-white"><Building2 className="size-5" /></span>
+          <strong className="text-sm leading-snug text-foreground">Database Management Project Module 3</strong>
+        </Link>
+        <div className="mt-4 border-l-2 border-primary/30 pl-3 text-[11px] leading-relaxed text-muted-foreground">
+          <p className="mb-1 font-semibold text-foreground">Project members</p>
+          <p>Jonn Clyde Andrei R. Catane</p>
+          <p>Renkylle Dhave C. Asilum</p>
+          <p>Kent Arvie Longyapon</p>
+        </div>
+      </div>
       <p className="mb-2 px-3 text-[11px] font-semibold tracking-wider text-muted-foreground uppercase">Main menu</p>
       <nav className="space-y-1">
         {navigation.map(({ href, label, icon: Icon }) => {

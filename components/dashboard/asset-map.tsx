@@ -63,7 +63,7 @@ export function AssetMap({ assets, loading }: { assets: Asset[]; loading: boolea
 
   return <article className="soft-shadow min-w-0 rounded-xl border bg-card p-5">
     <div className="mb-3"><h3 className="font-semibold">Building map</h3><p className="mt-1 text-xs text-muted-foreground">Pins show each building&apos;s latest inspection status</p></div>
-    <div className="relative overflow-hidden rounded-lg border bg-muted">
+    <div className="relative z-0 overflow-hidden rounded-lg border bg-muted">
       <div ref={container} className="h-[380px] w-full sm:h-[440px]" aria-label="Map of buildings" />
       {!loading && mapped.length === 0 && assets.length > 0 && <div className="pointer-events-none absolute bottom-3 left-3 right-3 z-[500] rounded-md bg-background/95 p-3 text-sm shadow sm:right-auto">No pins yet. Edit a building and place its pin on the map or enter coordinates.</div>}
       {mapError && <div className="absolute bottom-3 left-3 right-3 z-[500] rounded-md bg-background p-3 text-sm text-destructive shadow">{mapError}</div>}
